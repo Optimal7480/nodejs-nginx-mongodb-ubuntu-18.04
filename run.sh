@@ -58,7 +58,8 @@ tput setaf 2; echo "Configuring the nodejs hello world app."; sleep 1;
 echo
 tput sgr0
 mkdir "$FOLDER/$DOMAIN"
-cp "$(pwd)/hello-world.app.js $FOLDER/$DOMAIN/app.js"
+cp "$(pwd)/hello-world.app.js $FOLDER/$DOMAIN/"
+mv "$FOLDER/$DOMAIN/hello-world.app.js $FOLDER/$DOMAIN/app.js"
 sed -i -e "s/PORT/$PORT/" "$FOLDER/$DOMAIN/app.js"
 pm2 start --name "$DOMAIN" "$FOLDER/$DOMAIN/app.js"
 
