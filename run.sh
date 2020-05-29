@@ -12,7 +12,7 @@ read EMAIL
 echo "The internal port on which the nodejs app should run. E.g. 3000. This port must not be used yet!"
 read PORT
 echo "Where should the app be placed? E.g. /var/www/html or $(pwd)"
-read PATH
+read FOLDER
 
 # If blank server install software components
 if [ "$INSTALL" == "y" ] ;then
@@ -54,18 +54,17 @@ if [ "$INSTALL" == "y" ] ;then
 fi
 
 # Create the hello world app and start it
-tput setaf 2;
-echo "Configuring the nodejs hello world app."; sleep 1;
-echo;
+tput setaf 2; echo "Configuring the nodejs hello world app."; sleep 1;
+echo
 tput sgr0
-mkdir "$PATH/$DOMAIN"
-cp "$(pwd)/hello-world.app.js $PATH/$DOMAIN/app.js"
-sed -i -e "s/PORT/$PORT/" "$PATH/$DOMAIN/app.js"
-pm2 start --name "$DOMAIN" "$PATH/$DOMAIN/app.js"
+mkdir "$FOLDER/$DOMAIN"
+cp "$(pwd)/hello-world.app.js $FOLDER/$DOMAIN/app.js"
+sed -i -e "s/PORT/$PORT/" "$FOLDER/$DOMAIN/app.js"
+pm2 start --name "$DOMAIN" "$FOLDER/$DOMAIN/app.js"
 
 # Setup the domain
 tput setaf 2; echo "Configuring your domain $DOMAIN."; sleep 2;
-echo;
+echo
 tput sgr0
 sudo cp "$(pwd)"/nginx-virtual.conf /etc/nginx/sites-available/"./$DOMAIN.conf"
 sudo sed -i -e "s/example.com/$DOMAIN/" /etc/nginx/sites-available/"$DOMAIN.conf"
@@ -77,12 +76,12 @@ tput sgr0
 sudo certbot --nginx --agree-tos -n -m "$EMAIL" -d "$DOMAIN"
 sudo systemctl reload nginx
 
-tput setaf 4;  echo "Installation & configuration succesfully finished. Happy coding.";
-echo;
+tput setaf 4;  echo "Installation & configuration succesfully finished. Happy coding."
+echo
 sleep 1;
-tput setaf 2; echo "Need app or backend development in germany? See https://www.vanedler.de";
+tput setaf 2; echo "Need app or backend development in germany? See https://www.vanedler.de"
 sleep 1;
-echo "E-mail: mail@romanstark.de";
-echo "Bye!";
-echo;
-tput sgr0;
+echo "E-mail: mail@romanstark.de"
+echo "Bye!"
+echo
+tput sgr0
