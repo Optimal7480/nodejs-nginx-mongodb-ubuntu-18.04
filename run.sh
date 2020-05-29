@@ -38,7 +38,6 @@ if [ "$INSTALL" == "y" ] ;then
   fi
 	sudo mv /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-available/nginx.conf.backup
 	sudo cp $(pwd)/nginx.conf /etc/nginx/
-  sudo unlink /etc/nginx/sites-enabled/default
 	sudo systemctl reload nginx
 	tput setaf 2; echo "Downloading ssl_dhparam from mozilla.org..."; sleep 1;
 	tput sgr0
