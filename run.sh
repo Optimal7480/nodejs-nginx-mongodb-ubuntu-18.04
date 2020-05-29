@@ -10,9 +10,9 @@ read DOMAIN
 echo "Your Email-Address for important letsencrypt account notifications?"
 read EMAIL
 echo "The internal port on which the nodejs app should run. E.g. 3000. This port must not be used yet!"
-echo PORT
+read PORT
 echo "Where should the app be placed? E.g. /var/www/html or $(pwd)"
-echo PATH
+read PATH
 
 
 # If blank server install software components
@@ -24,13 +24,13 @@ if [ "$INSTALL" == "y" ] ;then
   tput sgr0;
 	echo 'Installing...'; sleep 1;
 	sudo add-apt-repository -y ppa:certbot/certbot
-  if [ "$MONGO" != "y" ] ;then
+  if [ "$MONGO" == "y" ] ;then
 	  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
 	  echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
 	fi
   sudo apt-get update
 	sudo curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-  if [ "$MONGO" != "y" ] ;then
+  if [ "$MONGO" == "y" ] ;then
 	  sudo apt-get install -y nodejs pwgen nginx software-properties-common python-certbot-nginx mongodb-org git
 	  sudo service mongod start
 	  sudo systemctl enable mongod.service
