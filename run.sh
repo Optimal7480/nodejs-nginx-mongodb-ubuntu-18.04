@@ -37,7 +37,7 @@ if [ "$INSTALL" == "y" ] ;then
     sudo apt-get install -y nodejs pwgen nginx software-properties-common python-certbot-nginx git
   fi
 	sudo mv /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-available/nginx.conf.backup
-	sudo cp "$(pwd)"/nginx.conf /etc/nginx/
+	sudo cp $(pwd)/nginx.conf /etc/nginx/
   sudo unlink /etc/nginx/sites-enabled/default
 	sudo systemctl reload nginx
 	tput setaf 2; echo "Downloading ssl_dhparam from mozilla.org..."; sleep 1;
@@ -57,24 +57,24 @@ fi
 tput setaf 2; echo "Configuring the nodejs hello world app."; sleep 1;
 echo
 tput sgr0
-mkdir "$FOLDER/$DOMAIN"
-cp "$(pwd)/hello-world.app.js $FOLDER/$DOMAIN/"
-mv "$FOLDER/$DOMAIN/hello-world.app.js $FOLDER/$DOMAIN/app.js"
-sed -i -e "s/PORT/$PORT/" "$FOLDER/$DOMAIN/app.js"
-pm2 start --name "$DOMAIN" "$FOLDER/$DOMAIN/app.js"
+mkdir $FOLDER/$DOMAIN
+cp $(pwd)/hello-world.app.js $FOLDER/$DOMAIN/app.js
+sed -i -e "s/PORT/$PORT/" $FOLDER/$DOMAIN/app.js
+pm2 start --name $DOMAIN $FOLDER/$DOMAIN/app.js
 
 # Setup the domain
 tput setaf 2; echo "Configuring your domain $DOMAIN."; sleep 2;
 echo
 tput sgr0
-sudo cp "$(pwd)"/nginx-virtual.conf /etc/nginx/sites-available/"./$DOMAIN.conf"
-sudo sed -i -e "s/example.com/$DOMAIN/" /etc/nginx/sites-available/"$DOMAIN.conf"
-sudo sed -i -e "s/PORT/$PORT/" /etc/nginx/sites-available/"$DOMAIN.conf"
-sudo ln -s /etc/nginx/sites-available/"$DOMAIN.conf" /etc/nginx/sites-enabled/
+sudo cp $(pwd)/nginx-virtual.conf /etc/nginx/sites-available/$DOMAIN.conf
+sudo sed -i -e "s/example.com/$DOMAIN/" /etc/nginx/sites-available/$DOMAIN.conf
+sudo sed -i -e "s/PORT/$PORT/" /etc/nginx/sites-available/$DOMAIN.conf
+sudo ln -s /etc/nginx/sites-available/$DOMAIN.conf /etc/nginx/sites-enabled/
+sudo systemctl reload nginx
 
 tput setaf 2; echo "Setting up SSL..." sleep 1;
 tput sgr0
-sudo certbot --nginx --agree-tos -n -m "$EMAIL" -d "$DOMAIN"
+sudo certbot --nginx --agree-tos -n -m $EMAIL -d $DOMAIN
 sudo systemctl reload nginx
 
 tput setaf 4;  echo "Installation & configuration succesfully finished. Happy coding."
