@@ -55,7 +55,7 @@ if [ "$INSTALL" == "y" ] ;then
 	tput sgr0
 fi
 
-# Create the hello world app and start it
+# Create the hello world app and start it as the current user
 tput setaf 2; echo "Configuring the nodejs hello world app."; sleep 1;
 echo
 tput sgr0
@@ -63,6 +63,7 @@ mkdir $FOLDER/$DOMAIN
 cp $(pwd)/hello-world.app.js $FOLDER/$DOMAIN/app.js
 sed -i -e "s/PORT/$PORT/" $FOLDER/$DOMAIN/app.js
 pm2 start --name $DOMAIN $FOLDER/$DOMAIN/app.js
+pm2 save
 
 # Setup the domain
 tput setaf 2; echo "Configuring your domain $DOMAIN."; sleep 2;
