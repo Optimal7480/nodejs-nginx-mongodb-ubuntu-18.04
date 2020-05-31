@@ -86,7 +86,7 @@ if [ "$TYPE" == "node" ] ;then
   sudo sed -i -e "s/PORT/$PORT/" /etc/nginx/sites-available/$DOMAIN.conf
 else
   sudo cp $(pwd)/nginx-virtual.spa.conf /etc/nginx/sites-available/$DOMAIN.conf
-  sudo sed -i -e "s/path/$FOLDER/" /etc/nginx/sites-available/$DOMAIN.conf
+  sudo sed -i -e "s+FOLDER+$FOLDER+" /etc/nginx/sites-available/$DOMAIN.conf
 fi
 sudo sed -i -e "s/example.com/$DOMAIN/" /etc/nginx/sites-available/$DOMAIN.conf
 sudo ln -s /etc/nginx/sites-available/$DOMAIN.conf /etc/nginx/sites-enabled/
