@@ -14,7 +14,7 @@ cd ./nodejs-nginx-mongodb-ubuntu-18.04
 ./run.sh
 ```
 
-Wou will be asked if you want to install the server components (nodejs nginx software-properties-common python-certbot-nginx, pm2), if you want MongoDb (mongodb-org, mongodb-runner) as well. Then you eill need to anwer your domain, email, port of nodejs app and the path where the app folder will be created. You need sudo rigths.
+Wou will be asked if you want to install the server components (nodejs nginx software-properties-common python-certbot-nginx, pm2), if you want MongoDb (mongodb-org, mongodb-runner) as well. Then you will need to anwer your domain, email, port of nodejs app and the path where the app folder will be created. You need sudo rigths. You cloud also choose to not use a node app but a spa like Angular. Make sure all parts of the path are chmod 755 so that nginx is allowed to access the path. Otherwise you would see a 403 error.
 
 ## Features
 
