@@ -12,6 +12,8 @@ read EMAIL
 echo "Setup an nodejs App or an SPA (like Angular)? (node/spa)"
 read TYPE
 if [ "$TYPE" == "node" ] ;then
+  echo "How to name the nodejs start file? E.g. app.js, index.js, main.js,..."
+  read NAME
   echo "The internal port on which the nodejs App should run. E.g. 3000. This port must not be used yet!"
   read PORT
 fi
@@ -69,9 +71,9 @@ echo
 tput sgr0
 mkdir $FOLDER/$DOMAIN
 if [ "$TYPE" == "node" ] ;then
-  cp $(pwd)/hello-world.app.js $FOLDER/$DOMAIN/app.js
-  sed -i -e "s/PORT/$PORT/" $FOLDER/$DOMAIN/app.js
-  pm2 start --name $DOMAIN $FOLDER/$DOMAIN/app.js
+  cp $(pwd)/hello-world.app.js $FOLDER/$DOMAIN/$NAME
+  sed -i -e "s/PORT/$PORT/" $FOLDER/$DOMAIN/$NAME
+  pm2 start --name $DOMAIN $FOLDER/$DOMAIN/$NAME
   pm2 save
 else
   cp $(pwd)/hello-world.html $FOLDER/$DOMAIN/index.html
