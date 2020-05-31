@@ -1,6 +1,6 @@
 #!/bin/bash
 # GET ALL USER INPUT
-tput setaf 4; echo "Welcome to nodej nginx server on Ubuntu 18.04 install bash script!"; sleep 2;
+tput setaf 4; echo "Welcome to nodejs/spa nginx server on Ubuntu 18.04 install bash script!"; sleep 2;
 tput setaf 2;
 read -n 1 -p "Install the server compontents? Usually needed only on fresh system. (y/n) " INSTALL;
 echo
@@ -9,9 +9,13 @@ echo "Domain Name (eg. example.com)?"
 read DOMAIN
 echo "Your Email-Address for important letsencrypt account notifications?"
 read EMAIL
-echo "The internal port on which the nodejs app should run. E.g. 3000. This port must not be used yet!"
-read PORT
-echo "Where should the app be placed? E.g. /var/www/html or $(pwd)"
+echo "Setup an nodejs App or an SPA (like Angular)? (node/spa)"
+read TYPE
+if [ "$TYPE" == "node" ] ;then
+  echo "The internal port on which the nodejs App should run. E.g. 3000. This port must not be used yet!"
+  read PORT
+fi
+echo "Where should the app be placed? E.g. /var/www/html or $(pwd). Make sure all path segments are chmod 755!"
 read FOLDER
 
 # If blank server install software components
@@ -55,23 +59,36 @@ if [ "$INSTALL" == "y" ] ;then
 	tput sgr0
 fi
 
-# Create the hello world app and start it as the current user
-tput setaf 2; echo "Configuring the nodejs hello world app."; sleep 1;
+# Create the hello world app
+if [ "$TYPE" == "node" ] ;then
+  tput setaf 2; echo "Configuring the nodejs hello world app."; sleep 1;
+else
+  tput setaf 2; echo "Configuring the spa hello world app."; sleep 1;
+fi
 echo
 tput sgr0
 mkdir $FOLDER/$DOMAIN
-cp $(pwd)/hello-world.app.js $FOLDER/$DOMAIN/app.js
-sed -i -e "s/PORT/$PORT/" $FOLDER/$DOMAIN/app.js
-pm2 start --name $DOMAIN $FOLDER/$DOMAIN/app.js
-pm2 save
+if [ "$TYPE" == "node" ] ;then
+  cp $(pwd)/hello-world.app.js $FOLDER/$DOMAIN/app.js
+  sed -i -e "s/PORT/$PORT/" $FOLDER/$DOMAIN/app.js
+  pm2 start --name $DOMAIN $FOLDER/$DOMAIN/app.js
+  pm2 save
+else
+  cp $(pwd)/hello-world.html $FOLDER/$DOMAIN/index.html
+fi
 
 # Setup the domain
 tput setaf 2; echo "Configuring your domain $DOMAIN."; sleep 2;
 echo
 tput sgr0
-sudo cp $(pwd)/nginx-virtual.conf /etc/nginx/sites-available/$DOMAIN.conf
+if [ "$TYPE" == "node" ] ;then
+  sudo cp $(pwd)/nginx-virtual.node.conf /etc/nginx/sites-available/$DOMAIN.conf
+  sudo sed -i -e "s/PORT/$PORT/" /etc/nginx/sites-available/$DOMAIN.conf
+else
+  sudo cp $(pwd)/nginx-virtual.spa.conf /etc/nginx/sites-available/$DOMAIN.conf
+  sudo sed -i -e "s/FOLDER/$FOLDER/" /etc/nginx/sites-available/$DOMAIN.conf
+fi
 sudo sed -i -e "s/example.com/$DOMAIN/" /etc/nginx/sites-available/$DOMAIN.conf
-sudo sed -i -e "s/PORT/$PORT/" /etc/nginx/sites-available/$DOMAIN.conf
 sudo ln -s /etc/nginx/sites-available/$DOMAIN.conf /etc/nginx/sites-enabled/
 sudo systemctl reload nginx
 
