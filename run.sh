@@ -36,11 +36,11 @@ if [ "$INSTALL" == "y" ] ;then
   sudo apt-get update
 	sudo curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
   if [ "$MONGO" == "y" ] ;then
-	  sudo apt-get install -y nodejs nginx software-properties-common python-certbot-nginx mongodb-org
+	  sudo apt-get install -y nodejs gcc g++ make nginx software-properties-common python-certbot-nginx mongodb-org
 	  sudo service mongod start
 	  sudo systemctl enable mongod.service
   else
-    sudo apt-get install -y nodejs nginx software-properties-common python-certbot-nginx
+    sudo apt-get install -y nodejs gcc g++ make nginx software-properties-common python-certbot-nginx
   fi
 	sudo mv /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-available/nginx.conf.backup
 	sudo cp $(pwd)/nginx.conf /etc/nginx/
